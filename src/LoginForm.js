@@ -18,27 +18,29 @@ class LoginForm extends Component {
     }
   };
 
-  handleSubmit = (event) => {
+  handleSubmit = async (event) => {
     event.preventDefault();
+    try{
     const user = {
       email: this.state.email,
       password: this.state.password,
     };
-    console.log("inside handle submit");
-    axios
-      .post("https://tutorial4-api.herokuapp.com/api/users/login", user)
-      .then((res) => {
-        console.log(res);
-        console.log(res.data);
+    //console.log("inside handle submit");
+    
+    const response=  await axios.post("https://tutorial4-api.herokuapp.com/api/users/login", user).then((res) => {
         if (res.data.status === true) {
           window.location.href = "/profileListing";
         } else {
-          this.setState({ errorMsg: "The entered credentials are incorrect. Please enter valid credentials" });
+          console.log("The credentials are invalid!");
         }
       });
+    }catch(error){
+      window.alert("Please enter valid credentials")
+
+    }
   };
 
-  errorComponent  () {
+  errorComponent =()=> {
     if (this.state.errorMsg !== '') {
       return (<div>
       <p className="text-danger">{this.state.errorMsg}</p>
